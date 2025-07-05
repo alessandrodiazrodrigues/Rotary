@@ -64,6 +64,8 @@
     border-color:var(--royal);
     background:var(--royal);
     color:white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(23,69,143,0.3);
   }
   .club-option input[type=radio]{
     display:none;
@@ -207,22 +209,22 @@ const TEMPLATE_URLS = {
 
 const LOGO_URL = "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/rotary%20vazio.png";
 
-// Coordenadas das áreas de foto e texto para cada template (baseado nas imagens originais)
+// Coordenadas das áreas de foto e texto para cada template (medidas precisas do Paint)
 const TEMPLATES = {
   interact: {
-    photoBox: { x: 312, y: 372, w: 330, h: 330 },
-    namePos: { x: 477, y: 750 },
-    clubPos: { x: 477, y: 780 }
+    photoBox: { x: 616, y: 484, w: 492, h: 483 },
+    namePos: { x: 862, y: 1020 },
+    clubPos: { x: 862, y: 1050 }
   },
   rotaract: {
-    photoBox: { x: 312, y: 372, w: 330, h: 330 },
-    namePos: { x: 477, y: 750 },
-    clubPos: { x: 477, y: 780 }
+    photoBox: { x: 616, y: 484, w: 492, h: 483 },
+    namePos: { x: 862, y: 1020 },
+    clubPos: { x: 862, y: 1050 }
   },
   rotary: {
-    photoBox: { x: 312, y: 372, w: 330, h: 330 },
-    namePos: { x: 477, y: 750 },
-    clubPos: { x: 477, y: 780 }
+    photoBox: { x: 616, y: 484, w: 492, h: 483 },
+    namePos: { x: 862, y: 1020 },
+    clubPos: { x: 862, y: 1050 }
   }
 };
 
@@ -252,17 +254,30 @@ function selectClub(type) {
     el.classList.remove('selected');
   });
   
-  // Adiciona seleção atual
-  document.querySelector(`[onclick="selectClub('${type}')"]`).classList.add('selected');
+  // Remove checked de todos os radio buttons
+  document.querySelectorAll('input[name="tipoClube"]').forEach(radio => {
+    radio.checked = false;
+  });
   
-  // Marca o radio button
-  document.querySelector(`input[value="${type}"]`).checked = true;
+  // Adiciona seleção atual
+  const selectedOption = document.querySelector(`[onclick="selectClub('${type}')"]`);
+  if (selectedOption) {
+    selectedOption.classList.add('selected');
+  }
+  
+  // Marca o radio button correto
+  const radioButton = document.querySelector(`input[value="${type}"]`);
+  if (radioButton) {
+    radioButton.checked = true;
+  }
   
   selectedClubType = type;
   
   // Limpa mensagens anteriores
   fotoError.classList.add("hidden");
   successMsg.classList.add("hidden");
+  
+  console.log(`✅ Clube selecionado: ${type}`);
 }
 
 function gerarArte(file) {
@@ -454,6 +469,15 @@ form.foto.addEventListener("change", function() {
 document.addEventListener("DOMContentLoaded", function() {
   console.log("🚀 Carregando templates originais do GitHub...");
   carregarTemplates();
+  
+  // Garantir que nenhum clube está selecionado inicialmente
+  selectedClubType = null;
+  document.querySelectorAll('.club-option').forEach(el => {
+    el.classList.remove('selected');
+  });
+  document.querySelectorAll('input[name="tipoClube"]').forEach(radio => {
+    radio.checked = false;
+  });
 });
 
 console.log("Rotary Réveillon 2025 - Sistema com templates originais carregado!");
