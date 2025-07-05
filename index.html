@@ -78,6 +78,7 @@
     left: 0;
     cursor: pointer;
     margin: 0;
+    z-index: 1;
   }
   canvas{display:block;width:100%;max-width:400px;
          margin:2rem auto;border:1px solid #ddd;border-radius:8px}
@@ -144,16 +145,16 @@
 
   <label>Tipo de Clube*
     <div class="club-options">
-      <div class="club-option" id="interact-option">
-        <input type="radio" name="tipoClube" value="interact" id="interact-radio" required>
+      <div class="club-option" data-clube="interact">
+        <input type="radio" name="tipoClube" value="interact" required>
         <strong>INTERACT</strong>
       </div>
-      <div class="club-option" id="rotaract-option">
-        <input type="radio" name="tipoClube" value="rotaract" id="rotaract-radio" required>
+      <div class="club-option" data-clube="rotaract">
+        <input type="radio" name="tipoClube" value="rotaract" required>
         <strong>ROTARACT</strong>
       </div>
-      <div class="club-option" id="rotary-option">
-        <input type="radio" name="tipoClube" value="rotary" id="rotary-radio" required>
+      <div class="club-option" data-clube="rotary">
+        <input type="radio" name="tipoClube" value="rotary" required>
         <strong>ROTARY</strong>
       </div>
     </div>
@@ -275,14 +276,14 @@ function selectClub(clubType) {
     radio.checked = false;
   });
   
-  // Adiciona seleção visual
-  const selectedOption = document.getElementById(`${clubType}-option`);
+  // Adiciona seleção visual no container correto
+  const selectedOption = document.querySelector(`[data-clube="${clubType}"]`);
   if (selectedOption) {
     selectedOption.classList.add('selected');
   }
   
   // Marca o radio button correto
-  const selectedRadio = document.getElementById(`${clubType}-radio`);
+  const selectedRadio = document.querySelector(`input[value="${clubType}"]`);
   if (selectedRadio) {
     selectedRadio.checked = true;
   }
@@ -297,48 +298,35 @@ function selectClub(clubType) {
   console.log(`✅ Clube ${clubType} selecionado com sucesso`);
 }
 
-// Event listeners para os botões de clube
+// Inicialização do sistema
 document.addEventListener('DOMContentLoaded', function() {
   console.log("🚀 Inicializando sistema...");
   
+  // Carregar templates
+  carregarTemplates();
+  
   // Adicionar event listeners para cada opção de clube
-  const interactOption = document.getElementById('interact-option');
-  const rotaractOption = document.getElementById('rotaract-option');
-  const rotaryOption = document.getElementById('rotary-option');
-  
-  if (interactOption) {
-    interactOption.addEventListener('click', function(e) {
+  document.querySelectorAll('.club-option').forEach(option => {
+    option.addEventListener('click', function(e) {
       e.preventDefault();
-      selectClub('interact');
+      e.stopPropagation();
+      
+      const clubType = this.getAttribute('data-clube');
+      if (clubType) {
+        selectClub(clubType);
+      }
     });
-  }
+  });
   
-  if (rotaractOption) {
-    rotaractOption.addEventListener('click', function(e) {
-      e.preventDefault();
-      selectClub('rotaract');
-    });
-  }
-  
-  if (rotaryOption) {
-    rotaryOption.addEventListener('click', function(e) {
-      e.preventDefault();
-      selectClub('rotary');
-    });
-  }
-  
-  // Event listeners para os radio buttons também
-  const radios = document.querySelectorAll('input[name="tipoClube"]');
-  radios.forEach(radio => {
-    radio.addEventListener('change', function() {
+  // Event listeners para os radio buttons
+  document.querySelectorAll('input[name="tipoClube"]').forEach(radio => {
+    radio.addEventListener('change', function(e) {
+      e.stopPropagation();
       if (this.checked) {
         selectClub(this.value);
       }
     });
   });
-  
-  // Carregar templates
-  carregarTemplates();
   
   // Garantir reset inicial
   selectedClubType = null;
