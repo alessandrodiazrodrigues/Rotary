@@ -207,7 +207,7 @@
   <p style="margin-top:1rem;font-size:0.8rem;">
     Seguindo as diretrizes oficiais de identidade visual do Rotary International
   </p>
-  <p class="version">Versão 05-07-2025-11-277</p>
+  <p class="version">Versão 05-07-2025-11-41</p>
 </footer>
 
 <script>
@@ -231,18 +231,18 @@ const TEMPLATE_URLS = {
 const TEMPLATES = {
   interact: {
     photoBox: { x: 616, y: 484, w: 492, h: 483 },
-    namePos: { x: 862, y: 1020 },
-    clubPos: { x: 862, y: 1050 }
+    namePos: { x: 862, y: 1000 },
+    clubPos: { x: 862, y: 1030 }
   },
   rotaract: {
     photoBox: { x: 616, y: 484, w: 492, h: 483 },
-    namePos: { x: 862, y: 1020 },
-    clubPos: { x: 862, y: 1050 }
+    namePos: { x: 862, y: 1000 },
+    clubPos: { x: 862, y: 1030 }
   },
   rotary: {
     photoBox: { x: 616, y: 484, w: 492, h: 483 },
-    namePos: { x: 862, y: 1020 },
-    clubPos: { x: 862, y: 1050 }
+    namePos: { x: 862, y: 1000 },
+    clubPos: { x: 862, y: 1030 }
   }
 };
 
@@ -269,6 +269,11 @@ function carregarTemplates() {
 // Função para selecionar clube
 function selectClub(clubType) {
   console.log(`🔄 Selecionando clube: ${clubType}`);
+  
+  // Limpa qualquer mensagem de erro de validação primeiro
+  document.querySelectorAll('input[name="tipoClube"]').forEach(radio => {
+    radio.setCustomValidity('');
+  });
   
   // Remove todas as seleções visuais
   document.querySelectorAll('.club-option').forEach(option => {
@@ -339,6 +344,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Remove apenas o required de radio buttons individuais (o grupo ainda será validado)
     radio.removeAttribute('required');
+    
+    // Limpa validação ao clicar
+    radio.addEventListener('click', function() {
+      this.setCustomValidity('');
+    });
   });
   
   // Adiciona validação customizada no formulário
@@ -415,19 +425,19 @@ function gerarArte(file) {
 
           // Adicionar nome e clube
           ctx.fillStyle = '#ffffff';
-          ctx.font = 'bold 28px "Frutiger", "Open Sans", Arial, sans-serif';
+          ctx.font = 'bold 32px "Frutiger", "Open Sans", Arial, sans-serif';
           ctx.textAlign = 'center';
-          ctx.shadowColor = 'rgba(0,0,0,0.5)';
-          ctx.shadowBlur = 2;
+          ctx.shadowColor = 'rgba(0,0,0,0.7)';
+          ctx.shadowBlur = 3;
 
           const nome = form.nome.value.trim();
           const clube = form.clube.value.trim();
 
-          // Nome em destaque
+          // Nome em destaque (maior)
           ctx.fillText(nome, template.namePos.x, template.namePos.y);
 
-          // Clube em fonte menor
-          ctx.font = 'normal 20px "Frutiger", "Open Sans", Arial, sans-serif';
+          // Clube em fonte menor mas ainda maior que antes
+          ctx.font = 'normal 24px "Frutiger", "Open Sans", Arial, sans-serif';
           ctx.fillText(clube, template.clubPos.x, template.clubPos.y);
 
           // Reset shadow
@@ -548,7 +558,7 @@ form.foto.addEventListener("change", function() {
   }
 });
 
-console.log("Rotary Réveillon 2025 - Sistema CORRIGIDO v05-07-2025-11-277 carregado!");
+console.log("Rotary Réveillon 2025 - Sistema CORRIGIDO v05-07-2025-11-41 carregado!");
 </script>
 
 </body>
