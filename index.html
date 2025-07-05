@@ -1,4 +1,4 @@
-const response = await fetch("https://script.google.com/macros/s/AKfycbxbRR22FaunsN9q_rVdEyQsSAHweTzwc1B6MFwpiJl60mYt0sHlSKmh6lduIAuNpBWI/exec", {<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -150,15 +150,15 @@ const response = await fetch("https://script.google.com/macros/s/AKfycbxbRR22Fau
   <label>Tipo de Clube*</label>
   <div class="club-options">
     <div class="club-option" data-clube="interact">
-      <input type="radio" name="tipoClube" value="interact" id="interact-radio" required>
+      <input type="radio" name="tipoClube" value="interact" id="interact-radio">
       <strong>INTERACT</strong>
     </div>
     <div class="club-option" data-clube="rotaract">
-      <input type="radio" name="tipoClube" value="rotaract" id="rotaract-radio" required>
+      <input type="radio" name="tipoClube" value="rotaract" id="rotaract-radio">
       <strong>ROTARACT</strong>
     </div>
     <div class="club-option" data-clube="rotary">
-      <input type="radio" name="tipoClube" value="rotary" id="rotary-radio" required>
+      <input type="radio" name="tipoClube" value="rotary" id="rotary-radio">
       <strong>ROTARY</strong>
     </div>
   </div>
@@ -206,7 +206,7 @@ const response = await fetch("https://script.google.com/macros/s/AKfycbxbRR22Fau
   <p style="margin-top:1rem;font-size:0.8rem;">
     Seguindo as diretrizes oficiais de identidade visual do Rotary International
   </p>
-  <p class="version">Versão 05-07-2025-13-45</p>
+  <p class="version">Versão 05-07-2025-14-00</p>
 </footer>
 
 <script>
@@ -269,11 +269,6 @@ function carregarTemplates() {
 function selectClub(clubType) {
   console.log(`🔄 Selecionando clube: ${clubType}`);
   
-  // Limpa qualquer mensagem de erro de validação primeiro
-  document.querySelectorAll('input[name="tipoClube"]').forEach(radio => {
-    radio.setCustomValidity('');
-  });
-  
   // Remove todas as seleções visuais
   document.querySelectorAll('.club-option').forEach(option => {
     option.classList.remove('selected');
@@ -294,7 +289,6 @@ function selectClub(clubType) {
   const selectedRadio = document.querySelector(`input[name="tipoClube"][value="${clubType}"]`);
   if (selectedRadio) {
     selectedRadio.checked = true;
-    // NÃO dispara evento change para evitar loop infinito
   }
   
   // Atualiza variável global
@@ -305,7 +299,6 @@ function selectClub(clubType) {
   successMsg.classList.add("hidden");
   
   console.log(`✅ Clube ${clubType} selecionado com sucesso`);
-  console.log(`✅ Radio button checked: ${selectedRadio ? selectedRadio.checked : 'não encontrado'}`);
 }
 
 // Inicialização do sistema
@@ -330,9 +323,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Event listeners para os radio buttons - SIMPLIFICADO
   document.querySelectorAll('input[name="tipoClube"]').forEach(radio => {
-    // Remove apenas o required de radio buttons individuais
-    radio.removeAttribute('required');
-    
     // Event listener simples - só quando clicado diretamente
     radio.addEventListener('click', function() {
       if (this.checked) {
@@ -550,7 +540,7 @@ form.foto.addEventListener("change", function() {
   }
 });
 
-console.log("Rotary Réveillon 2025 - Sistema CORRIGIDO v05-07-2025-13-00 carregado!");
+console.log("Rotary Réveillon 2025 - Sistema CORRIGIDO v05-07-2025-14-00 carregado!");
 </script>
 
 </body>
