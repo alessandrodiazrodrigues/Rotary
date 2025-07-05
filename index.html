@@ -132,6 +132,11 @@
     ROTARY DISTRITO 4563
   </div>
   <h1>Réveillon 2025 – Fundo Anual</h1>
+  <div style="background:#e8f4fd;border:1px solid #bee5eb;border-radius:8px;padding:1.5rem;margin:1rem auto;max-width:540px;color:#0c5460;font-size:0.95rem;line-height:1.5;">
+    <p style="margin:0 0 1rem 0;"><strong>Hotsite para gerar card com a imagem do companheiro que fez a doação da campanha.</strong></p>
+    <p style="margin:0 0 1rem 0;">Se você ainda não fez a doação, por favor, faça através do site: <a href="https://rotary.org.br/emissao-de-boletos/doacoes-fundacao-rotaria" target="_blank" style="color:#17458f;text-decoration:none;font-weight:600;">rotary.org.br/emissao-de-boletos/doacoes-fundacao-rotaria</a></p>
+    <p style="margin:0;">Se tiver dúvidas, consulte o presidente do seu clube, ou a secretaria do distrito.</p>
+  </div>
 </header>
 
 <form id="rotaryForm">
@@ -143,22 +148,21 @@
     <input name="distrito" type="text" value="4563" readonly>
   </label>
 
-  <label>Tipo de Clube*
-    <div class="club-options">
-      <div class="club-option" data-clube="interact">
-        <input type="radio" name="tipoClube" value="interact" required>
-        <strong>INTERACT</strong>
-      </div>
-      <div class="club-option" data-clube="rotaract">
-        <input type="radio" name="tipoClube" value="rotaract" required>
-        <strong>ROTARACT</strong>
-      </div>
-      <div class="club-option" data-clube="rotary">
-        <input type="radio" name="tipoClube" value="rotary" required>
-        <strong>ROTARY</strong>
-      </div>
+  <label>Tipo de Clube*</label>
+  <div class="club-options">
+    <div class="club-option" data-clube="interact">
+      <input type="radio" name="tipoClube" value="interact" id="interact-radio" required>
+      <strong>INTERACT</strong>
     </div>
-  </label>
+    <div class="club-option" data-clube="rotaract">
+      <input type="radio" name="tipoClube" value="rotaract" id="rotaract-radio" required>
+      <strong>ROTARACT</strong>
+    </div>
+    <div class="club-option" data-clube="rotary">
+      <input type="radio" name="tipoClube" value="rotary" id="rotary-radio" required>
+      <strong>ROTARY</strong>
+    </div>
+  </div>
 
   <label>Nome do Clube*
     <input name="clube" type="text" required placeholder="Ex: Rotary Club Itaquaquecetuba">
@@ -203,7 +207,7 @@
   <p style="margin-top:1rem;font-size:0.8rem;">
     Seguindo as diretrizes oficiais de identidade visual do Rotary International
   </p>
-  <p class="version">Versão 05-07-2025-09-55</p>
+  <p class="version">Versão 05-07-2025-11-277</p>
 </footer>
 
 <script>
@@ -283,9 +287,13 @@ function selectClub(clubType) {
   }
   
   // Marca o radio button correto
-  const selectedRadio = document.querySelector(`input[value="${clubType}"]`);
+  const selectedRadio = document.querySelector(`input[name="tipoClube"][value="${clubType}"]`);
   if (selectedRadio) {
     selectedRadio.checked = true;
+    // Dispara evento change manualmente para garantir validação
+    selectedRadio.dispatchEvent(new Event('change', { bubbles: true }));
+    // Remove a mensagem de validação customizada
+    selectedRadio.setCustomValidity('');
   }
   
   // Atualiza variável global
@@ -296,6 +304,7 @@ function selectClub(clubType) {
   successMsg.classList.add("hidden");
   
   console.log(`✅ Clube ${clubType} selecionado com sucesso`);
+  console.log(`✅ Radio button checked: ${selectedRadio ? selectedRadio.checked : 'não encontrado'}`);
 }
 
 // Inicialização do sistema
@@ -324,8 +333,28 @@ document.addEventListener('DOMContentLoaded', function() {
       e.stopPropagation();
       if (this.checked) {
         selectClub(this.value);
+        console.log(`📻 Radio button changed: ${this.value}`);
       }
     });
+    
+    // Remove apenas o required de radio buttons individuais (o grupo ainda será validado)
+    radio.removeAttribute('required');
+  });
+  
+  // Adiciona validação customizada no formulário
+  form.addEventListener('submit', function(e) {
+    const radioButtons = document.querySelectorAll('input[name="tipoClube"]');
+    const isSelected = Array.from(radioButtons).some(radio => radio.checked);
+    
+    if (!isSelected) {
+      e.preventDefault();
+      radioButtons[0].setCustomValidity('Por favor, selecione um tipo de clube.');
+      radioButtons[0].reportValidity();
+      return false;
+    } else {
+      // Limpa validação customizada se algo foi selecionado
+      radioButtons.forEach(radio => radio.setCustomValidity(''));
+    }
   });
   
   // Garantir reset inicial
@@ -519,7 +548,7 @@ form.foto.addEventListener("change", function() {
   }
 });
 
-console.log("Rotary Réveillon 2025 - Sistema CORRIGIDO v05-07-2025-09-55 carregado!");
+console.log("Rotary Réveillon 2025 - Sistema CORRIGIDO v05-07-2025-11-277 carregado!");
 </script>
 
 </body>
