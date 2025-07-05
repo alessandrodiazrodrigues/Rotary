@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Réveillon 2025 | Rotary Distrito 4563</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+  /* ——— Identidade visual Rotary ——— */
+  @font-face{
+    font-family:"Frutiger";
+    src:local("Frutiger"),local("Frutiger LT Std");
+    font-weight:400;
+  }
+  :root{
+    --royal:#17458f;  /* Rotary Royal Blue oficial */
+    --gold:#f7a81b;   /* Rotary Gold oficial */
+    --sky-blue:#00a2e0; /* Sky Blue - Interact */
+    --cranberry:#d41367; /* Cranberry - Rotaract */
+  }
+  *{box-sizing:border-box;margin:0}
+  body{
+    padding:2rem;
+    font-family:"Frutiger","Open Sans","Arial",sans-serif;
+    background:#f5f7fa;
+    color:#333;
+  }
+  header{
+    text-align:center;
+    margin-bottom:2rem;
+  }
+  header img{max-width:220px;height:auto;margin-bottom:.5rem}
+  h1{font-size:1.9rem;color:var(--royal)}
+  form{
+    max-width:540px;margin:auto;background:#fff;
+    padding:2rem;border-radius:8px;
+    box-shadow:0 0 12px rgba(0,0,0,.08);
+  }
+  label{display:block;margin-top:1rem;font-weight:600}
+  input[type=text],input[type=email],input[type=tel],input[type=file],select{
+    width:100%;padding:.6rem;
+    border:1px solid #ccc;border-radius:4px;font-size:.95rem
+  }
+  input[readonly]{background:#eef2f8}
+  select{background:white}
+  .club-options{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:1rem;
+    margin-top:0.5rem;
+  }
+  .club-option{
+    border:2px solid #ddd;
+    border-radius:8px;
+    padding:1rem;
+    text-align:center;
+    cursor:pointer;
+    transition:all 0.3s ease;
+  }
+  .club-option:hover{
+    border-color:var(--royal);
+    background:#f8f9ff;
+  }
+  .club-option.selected{
+    border-color:var(--royal);
+    background:var(--royal);
+    color:white;
+  }
+  .club-option input[type=radio]{
+    display:none;
+  }
+  canvas{display:block;width:100%;max-width:400px;
+         margin:2rem auto;border:1px solid #ddd;border-radius:8px}
+  .btn{
+    margin-top:1.5rem;padding:.8rem 1.2rem;font-size:1rem;
+    font-weight:600;border:none;border-radius:4px;cursor:pointer;
+    transition:all 0.3s ease;
+  }
+  .primary{background:var(--royal);color:#fff}
+  .primary:hover{background:#2956a8}
+  .disabled{background:#9aa9c5;cursor:not-allowed}
+  .hidden{display:none}
+  a.btn{text-decoration:none;display:block;text-align:center}
+  .loading{color:#666;font-style:italic;text-align:center;margin-top:1rem}
+  .error{color:#d32f2f;background:#ffebee;padding:0.5rem;border-radius:4px;margin-top:0.5rem}
+  .success{color:#2e7d32;background:#e8f5e8;padding:0.5rem;border-radius:4px;margin-top:0.5rem}
+  footer{
+    text-align:center;
+    margin-top:3rem;
+    padding:2rem;
+    background:#f8f9fa;
+    border-radius:8px;
+    color:#666;
+    font-size:0.9rem;
+    max-width:540px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  footer .developer{
+    color:var(--royal);
+    font-weight:600;
+  }
+  @media(min-width:600px){h1{font-size:2.2rem}}
+  @media(max-width:600px){
+    .club-options{grid-template-columns:1fr;}
+  }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/rotary%20vazio.png"
+       alt="Logomarca Rotary Distrito 4563" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='block';"
+       style="max-width:220px;height:auto;margin-bottom:.5rem">
+  <div id="logoFallback" style="display:none;color:var(--royal);font-size:1.5rem;font-weight:bold;">
+    ROTARY DISTRITO 4563
+  </div>
+  <h1>Réveillon 2025 – Fundo Anual</h1>
+</header>
+
+<form id="rotaryForm">
+  <label>Nome completo*
+    <input name="nome" type="text" required>
+  </label>
+
+  <label>Distrito*
+    <input name="distrito" type="text" value="4563" readonly>
+  </label>
+
+  <label>Tipo de Clube*
+    <div class="club-options">
+      <div class="club-option" onclick="selectClub('interact')">
+        <input type="radio" name="tipoClube" value="interact" required>
+        <strong>INTERACT</strong>
+      </div>
+      <div class="club-option" onclick="selectClub('rotaract')">
+        <input type="radio" name="tipoClube" value="rotaract" required>
+        <strong>ROTARACT</strong>
+      </div>
+      <div class="club-option" onclick="selectClub('rotary')">
+        <input type="radio" name="tipoClube" value="rotary" required>
+        <strong>ROTARY</strong>
+      </div>
+    </div>
+  </label>
+
+  <label>Nome do Clube*
+    <input name="clube" type="text" required placeholder="Ex: Rotary Club Itaquaquecetuba">
+  </label>
+
+  <label>WhatsApp*
+    <input name="whatsapp" type="tel" placeholder="(DDD) 9 xxxx-xxxx" required>
+  </label>
+
+  <label>E-mail*
+    <input name="email" type="email" required>
+  </label>
+
+  <label>
+    <input type="checkbox" name="doacao" value="Sim">
+    Declaro que já realizei uma doação ao fundo anual
+  </label>
+
+  <label>
+    <input type="checkbox" name="consentimento" value="Autorizado" required>
+    Autorizo o uso da minha imagem e dados nas mídias do Rotary Distrito 4563
+  </label>
+
+  <label>Enviar foto (JPG/PNG)*
+    <input name="foto" type="file" accept="image/jpeg,image/png,image/jpg" required>
+    <div id="fotoError" class="error hidden">Por favor, selecione uma foto válida (JPG ou PNG).</div>
+  </label>
+
+  <button id="gerarBtn" class="btn primary" type="submit">Gerar minha arte</button>
+  <div id="status" class="loading hidden"></div>
+  <div id="successMsg" class="success hidden"></div>
+</form>
+
+<canvas id="preview" width="1080" height="1350" class="hidden"></canvas>
+<a id="downloadLink" class="hidden btn primary" download="Reveillon2025.png">
+  Baixar Arte
+</a>
+
+<footer>
+  <p>Sistema desenvolvido por <span class="developer">Alessandro Diaz Rodrigues</span></p>
+  <p>Rotary Club Itaquaquecetuba • Distrito 4563</p>
+  <p style="margin-top:1rem;font-size:0.8rem;">
+    Seguindo as diretrizes oficiais de identidade visual do Rotary International
+  </p>
+</footer>
+
+<script>
+const form = document.getElementById("rotaryForm");
+const canvas = document.getElementById("preview");
+const ctx = canvas.getContext("2d");
+const dlLink = document.getElementById("downloadLink");
+const btn = document.getElementById("gerarBtn");
+const status = document.getElementById("status");
+const fotoError = document.getElementById("fotoError");
+const successMsg = document.getElementById("successMsg");
+
+// URLs corretas dos templates no GitHub (formato Raw)
+const TEMPLATE_URLS = {
+  rotaract: "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/2.jpg",
+  interact: "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/4.jpg",
+  rotary: "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/5.jpg"
+};
+
+const LOGO_URL = "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/rotary%20vazio.png";
+
+// Coordenadas das áreas de foto e texto para cada template (baseado nas imagens originais)
+const TEMPLATES = {
+  interact: {
+    photoBox: { x: 540, y: 350, w: 330, h: 330 },
+    namePos: { x: 705, y: 780 },
+    clubPos: { x: 705, y: 810 }
+  },
+  rotaract: {
+    photoBox: { x: 540, y: 350, w: 330, h: 330 },
+    namePos: { x: 705, y: 780 },
+    clubPos: { x: 705, y: 810 }
+  },
+  rotary: {
+    photoBox: { x: 540, y: 350, w: 330, h: 330 },
+    namePos: { x: 705, y: 780 },
+    clubPos: { x: 705, y: 810 }
+  }
+};
+
+// Templates carregados
+let templatesCarregados = {};
+let selectedClubType = null;
+
+// Carregar templates originais
+function carregarTemplates() {
+  Object.keys(TEMPLATE_URLS).forEach(tipo => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = function() {
+      templatesCarregados[tipo] = img;
+      console.log(`✅ Template ${tipo} carregado`);
+    };
+    img.onerror = function() {
+      console.log(`❌ Erro ao carregar template ${tipo}`);
+    };
+    img.src = TEMPLATE_URLS[tipo];
+  });
+}
+
+function selectClub(type) {
+  // Remove seleção anterior
+  document.querySelectorAll('.club-option').forEach(el => {
+    el.classList.remove('selected');
+  });
+  
+  // Adiciona seleção atual
+  document.querySelector(`[onclick="selectClub('${type}')"]`).classList.add('selected');
+  
+  // Marca o radio button
+  document.querySelector(`input[value="${type}"]`).checked = true;
+  
+  selectedClubType = type;
+  
+  // Limpa mensagens anteriores
+  fotoError.classList.add("hidden");
+  successMsg.classList.add("hidden");
+}
+
+function gerarArte(file) {
+  return new Promise((resolve, reject) => {
+    if (!selectedClubType) {
+      reject(new Error("Por favor, selecione o tipo de clube."));
+      return;
+    }
+
+    if (!templatesCarregados[selectedClubType]) {
+      reject(new Error("Template ainda não foi carregado. Aguarde um momento."));
+      return;
+    }
+
+    if (!file.type.match(/^image\/(jpeg|jpg|png)$/i)) {
+      reject(new Error("Formato de arquivo inválido. Use JPG ou PNG."));
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      reject(new Error("Arquivo muito grande. Máximo 10MB."));
+      return;
+    }
+
+    const fr = new FileReader();
+    
+    fr.onload = function(e) {
+      const img = new Image();
+      
+      img.onload = function() {
+        try {
+          const templateImg = templatesCarregados[selectedClubType];
+          
+          // Ajustar canvas para dimensões do template original
+          canvas.width = templateImg.naturalWidth;
+          canvas.height = templateImg.naturalHeight;
+          
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+          // Desenhar template original
+          ctx.drawImage(templateImg, 0, 0);
+          
+          // Adicionar foto do usuário
+          const template = TEMPLATES[selectedClubType];
+          const box = template.photoBox;
+          
+          const minDimension = Math.min(img.width, img.height);
+          const sx = (img.width - minDimension) / 2;
+          const sy = (img.height - minDimension) / 2;
+          
+          ctx.drawImage(img, sx, sy, minDimension, minDimension, box.x, box.y, box.w, box.h);
+          
+          // Adicionar nome e clube com fontes e cores oficiais do Rotary
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'bold 28px "Frutiger", "Open Sans", Arial, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.shadowColor = 'rgba(0,0,0,0.5)';
+          ctx.shadowBlur = 2;
+          
+          const nome = form.nome.value.trim();
+          const clube = form.clube.value.trim();
+          
+          // Nome em destaque
+          ctx.fillText(nome, template.namePos.x, template.namePos.y);
+          
+          // Clube em fonte menor
+          ctx.font = 'normal 20px "Frutiger", "Open Sans", Arial, sans-serif';
+          ctx.fillText(clube, template.clubPos.x, template.clubPos.y);
+          
+          // Reset shadow
+          ctx.shadowBlur = 0;
+          ctx.shadowColor = 'transparent';
+          
+          resolve(canvas.toDataURL("image/png", 0.9));
+        } catch (error) {
+          reject(new Error("Erro ao processar imagem: " + error.message));
+        }
+      };
+      
+      img.onerror = function() {
+        reject(new Error("Erro ao carregar a imagem selecionada"));
+      };
+      
+      img.src = e.target.result;
+    };
+    
+    fr.onerror = function() {
+      reject(new Error("Erro ao ler o arquivo"));
+    };
+    
+    fr.readAsDataURL(file);
+  });
+}
+
+// Event listener do formulário
+form.addEventListener("submit", async function(ev) {
+  ev.preventDefault();
+  
+  fotoError.classList.add("hidden");
+  successMsg.classList.add("hidden");
+  
+  const foto = form.foto.files[0];
+  if (!foto) {
+    fotoError.textContent = "Por favor, selecione uma foto.";
+    fotoError.classList.remove("hidden");
+    return;
+  }
+
+  btn.classList.add("disabled");
+  btn.textContent = "Gerando...";
+  status.textContent = "Processando sua imagem...";
+  status.classList.remove("hidden");
+
+  try {
+    const dataURL = await gerarArte(foto);
+    
+    status.textContent = "Arte gerada com sucesso!";
+    
+    canvas.classList.remove("hidden");
+    dlLink.href = dataURL;
+    dlLink.classList.remove("hidden");
+
+    const payload = {
+      nome: form.nome.value.trim(),
+      distrito: form.distrito.value,
+      tipoClube: selectedClubType,
+      clube: form.clube.value.trim(),
+      whatsapp: form.whatsapp.value.trim(),
+      email: form.email.value.trim(),
+      doacao: form.doacao.checked ? "Sim" : "Não",
+      consentimento: form.consentimento.checked ? "Autorizado" : "Não",
+      imageBase64: dataURL
+    };
+
+    status.textContent = "Enviando por e-mail...";
+
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbw7JjJ4SLUk7Plc_bzRUixFtF27nla25EmTrBo0l4CZHyEaEYyILuXOjQSbRi4sKDw/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { 
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      status.classList.add("hidden");
+      successMsg.textContent = "Arte enviada ao seu e-mail! Verifique sua caixa de entrada em alguns minutos.";
+      successMsg.classList.remove("hidden");
+      
+    } catch (fetchError) {
+      console.warn("Erro no envio automático:", fetchError);
+      status.classList.add("hidden");
+      successMsg.textContent = "Arte gerada com sucesso! Use o botão 'Baixar Arte' para salvar.";
+      successMsg.classList.remove("hidden");
+    }
+
+  } catch (error) {
+    console.error("Erro:", error);
+    status.classList.add("hidden");
+    fotoError.textContent = error.message;
+    fotoError.classList.remove("hidden");
+  } finally {
+    btn.classList.remove("disabled");
+    btn.textContent = "Gerar minha arte";
+  }
+});
+
+// Validação em tempo real do arquivo
+form.foto.addEventListener("change", function() {
+  fotoError.classList.add("hidden");
+  successMsg.classList.add("hidden");
+  const file = this.files[0];
+  
+  if (file) {
+    if (!file.type.match(/^image\/(jpeg|jpg|png)$/i)) {
+      fotoError.textContent = "Formato inválido. Use apenas JPG ou PNG.";
+      fotoError.classList.remove("hidden");
+      this.value = "";
+    } else if (file.size > 10 * 1024 * 1024) {
+      fotoError.textContent = "Arquivo muito grande. Máximo 10MB.";
+      fotoError.classList.remove("hidden");
+      this.value = "";
+    }
+  }
+});
+
+// Inicializar carregamento dos templates
+document.addEventListener("DOMContentLoaded", function() {
+  console.log("🚀 Carregando templates originais do GitHub...");
+  carregarTemplates();
+});
+
+console.log("Rotary Réveillon 2025 - Sistema com templates originais carregado!");
+</script>
+
+</body>
+</html>
