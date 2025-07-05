@@ -55,20 +55,29 @@
     text-align:center;
     cursor:pointer;
     transition:all 0.3s ease;
+    user-select: none;
+    position: relative;
   }
   .club-option:hover{
     border-color:var(--royal);
     background:#f8f9ff;
   }
   .club-option.selected{
-    border-color:var(--royal);
-    background:var(--royal);
-    color:white;
+    border-color:var(--royal) !important;
+    background:var(--royal) !important;
+    color:white !important;
     transform: scale(1.05);
     box-shadow: 0 4px 12px rgba(23,69,143,0.3);
   }
   .club-option input[type=radio]{
-    display:none;
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    margin: 0;
   }
   canvas{display:block;width:100%;max-width:400px;
          margin:2rem auto;border:1px solid #ddd;border-radius:8px}
@@ -101,6 +110,11 @@
     color:var(--royal);
     font-weight:600;
   }
+  .version{
+    color:#999;
+    font-size:0.7rem;
+    margin-top:0.5rem;
+  }
   @media(min-width:600px){h1{font-size:2.2rem}}
   @media(max-width:600px){
     .club-options{grid-template-columns:1fr;}
@@ -130,16 +144,16 @@
 
   <label>Tipo de Clube*
     <div class="club-options">
-      <div class="club-option" onclick="selectClub('interact')">
-        <input type="radio" name="tipoClube" value="interact" required>
+      <div class="club-option" id="interact-option">
+        <input type="radio" name="tipoClube" value="interact" id="interact-radio" required>
         <strong>INTERACT</strong>
       </div>
-      <div class="club-option" onclick="selectClub('rotaract')">
-        <input type="radio" name="tipoClube" value="rotaract" required>
+      <div class="club-option" id="rotaract-option">
+        <input type="radio" name="tipoClube" value="rotaract" id="rotaract-radio" required>
         <strong>ROTARACT</strong>
       </div>
-      <div class="club-option" onclick="selectClub('rotary')">
-        <input type="radio" name="tipoClube" value="rotary" required>
+      <div class="club-option" id="rotary-option">
+        <input type="radio" name="tipoClube" value="rotary" id="rotary-radio" required>
         <strong>ROTARY</strong>
       </div>
     </div>
@@ -188,6 +202,7 @@
   <p style="margin-top:1rem;font-size:0.8rem;">
     Seguindo as diretrizes oficiais de identidade visual do Rotary International
   </p>
+  <p class="version">Versão 05-07-2025-09-55</p>
 </footer>
 
 <script>
@@ -200,16 +215,14 @@ const status = document.getElementById("status");
 const fotoError = document.getElementById("fotoError");
 const successMsg = document.getElementById("successMsg");
 
-// URLs corretas dos templates no GitHub (formato Raw)
+// URLs corretas dos templates no GitHub com templates específicos
 const TEMPLATE_URLS = {
-  rotaract: "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/2.jpg",
   interact: "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/4.jpg",
+  rotaract: "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/2.jpg",
   rotary: "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/5.jpg"
 };
 
-const LOGO_URL = "https://raw.githubusercontent.com/alessandrodiazrodrigues/Rotary/1df7c2da5afb433ae9763face0cf6819d7695b52/rotary%20vazio.png";
-
-// Coordenadas das áreas de foto e texto para cada template (medidas precisas do Paint)
+// Coordenadas EXATAS medidas no Paint
 const TEMPLATES = {
   interact: {
     photoBox: { x: 616, y: 484, w: 492, h: 483 },
@@ -248,37 +261,90 @@ function carregarTemplates() {
   });
 }
 
-function selectClub(type) {
-  // Remove seleção anterior
-  document.querySelectorAll('.club-option').forEach(el => {
-    el.classList.remove('selected');
+// Função para selecionar clube
+function selectClub(clubType) {
+  console.log(`🔄 Selecionando clube: ${clubType}`);
+  
+  // Remove todas as seleções visuais
+  document.querySelectorAll('.club-option').forEach(option => {
+    option.classList.remove('selected');
   });
   
-  // Remove checked de todos os radio buttons
+  // Remove todos os checks dos radio buttons
   document.querySelectorAll('input[name="tipoClube"]').forEach(radio => {
     radio.checked = false;
   });
   
-  // Adiciona seleção atual
-  const selectedOption = document.querySelector(`[onclick="selectClub('${type}')"]`);
+  // Adiciona seleção visual
+  const selectedOption = document.getElementById(`${clubType}-option`);
   if (selectedOption) {
     selectedOption.classList.add('selected');
   }
   
   // Marca o radio button correto
-  const radioButton = document.querySelector(`input[value="${type}"]`);
-  if (radioButton) {
-    radioButton.checked = true;
+  const selectedRadio = document.getElementById(`${clubType}-radio`);
+  if (selectedRadio) {
+    selectedRadio.checked = true;
   }
   
-  selectedClubType = type;
+  // Atualiza variável global
+  selectedClubType = clubType;
   
-  // Limpa mensagens anteriores
+  // Limpa mensagens
   fotoError.classList.add("hidden");
   successMsg.classList.add("hidden");
   
-  console.log(`✅ Clube selecionado: ${type}`);
+  console.log(`✅ Clube ${clubType} selecionado com sucesso`);
 }
+
+// Event listeners para os botões de clube
+document.addEventListener('DOMContentLoaded', function() {
+  console.log("🚀 Inicializando sistema...");
+  
+  // Adicionar event listeners para cada opção de clube
+  const interactOption = document.getElementById('interact-option');
+  const rotaractOption = document.getElementById('rotaract-option');
+  const rotaryOption = document.getElementById('rotary-option');
+  
+  if (interactOption) {
+    interactOption.addEventListener('click', function(e) {
+      e.preventDefault();
+      selectClub('interact');
+    });
+  }
+  
+  if (rotaractOption) {
+    rotaractOption.addEventListener('click', function(e) {
+      e.preventDefault();
+      selectClub('rotaract');
+    });
+  }
+  
+  if (rotaryOption) {
+    rotaryOption.addEventListener('click', function(e) {
+      e.preventDefault();
+      selectClub('rotary');
+    });
+  }
+  
+  // Event listeners para os radio buttons também
+  const radios = document.querySelectorAll('input[name="tipoClube"]');
+  radios.forEach(radio => {
+    radio.addEventListener('change', function() {
+      if (this.checked) {
+        selectClub(this.value);
+      }
+    });
+  });
+  
+  // Carregar templates
+  carregarTemplates();
+  
+  // Garantir reset inicial
+  selectedClubType = null;
+  
+  console.log("✅ Sistema inicializado");
+});
 
 function gerarArte(file) {
   return new Promise((resolve, reject) => {
@@ -303,71 +369,71 @@ function gerarArte(file) {
     }
 
     const fr = new FileReader();
-    
+
     fr.onload = function(e) {
       const img = new Image();
-      
+
       img.onload = function() {
         try {
           const templateImg = templatesCarregados[selectedClubType];
-          
+
           // Ajustar canvas para dimensões do template original
           canvas.width = templateImg.naturalWidth;
           canvas.height = templateImg.naturalHeight;
-          
+
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-          
+
           // Desenhar template original
           ctx.drawImage(templateImg, 0, 0);
-          
+
           // Adicionar foto do usuário
           const template = TEMPLATES[selectedClubType];
           const box = template.photoBox;
-          
+
           const minDimension = Math.min(img.width, img.height);
           const sx = (img.width - minDimension) / 2;
           const sy = (img.height - minDimension) / 2;
-          
+
           ctx.drawImage(img, sx, sy, minDimension, minDimension, box.x, box.y, box.w, box.h);
-          
-          // Adicionar nome e clube com fontes e cores oficiais do Rotary
+
+          // Adicionar nome e clube
           ctx.fillStyle = '#ffffff';
           ctx.font = 'bold 28px "Frutiger", "Open Sans", Arial, sans-serif';
           ctx.textAlign = 'center';
           ctx.shadowColor = 'rgba(0,0,0,0.5)';
           ctx.shadowBlur = 2;
-          
+
           const nome = form.nome.value.trim();
           const clube = form.clube.value.trim();
-          
+
           // Nome em destaque
           ctx.fillText(nome, template.namePos.x, template.namePos.y);
-          
+
           // Clube em fonte menor
           ctx.font = 'normal 20px "Frutiger", "Open Sans", Arial, sans-serif';
           ctx.fillText(clube, template.clubPos.x, template.clubPos.y);
-          
+
           // Reset shadow
           ctx.shadowBlur = 0;
           ctx.shadowColor = 'transparent';
-          
+
           resolve(canvas.toDataURL("image/png", 0.9));
         } catch (error) {
           reject(new Error("Erro ao processar imagem: " + error.message));
         }
       };
-      
+
       img.onerror = function() {
         reject(new Error("Erro ao carregar a imagem selecionada"));
       };
-      
+
       img.src = e.target.result;
     };
-    
+
     fr.onerror = function() {
       reject(new Error("Erro ao ler o arquivo"));
     };
-    
+
     fr.readAsDataURL(file);
   });
 }
@@ -375,10 +441,10 @@ function gerarArte(file) {
 // Event listener do formulário
 form.addEventListener("submit", async function(ev) {
   ev.preventDefault();
-  
+
   fotoError.classList.add("hidden");
   successMsg.classList.add("hidden");
-  
+
   const foto = form.foto.files[0];
   if (!foto) {
     fotoError.textContent = "Por favor, selecione uma foto.";
@@ -393,9 +459,9 @@ form.addEventListener("submit", async function(ev) {
 
   try {
     const dataURL = await gerarArte(foto);
-    
+
     status.textContent = "Arte gerada com sucesso!";
-    
+
     canvas.classList.remove("hidden");
     dlLink.href = dataURL;
     dlLink.classList.remove("hidden");
@@ -427,7 +493,7 @@ form.addEventListener("submit", async function(ev) {
       status.classList.add("hidden");
       successMsg.textContent = "Arte enviada ao seu e-mail! Verifique sua caixa de entrada em alguns minutos.";
       successMsg.classList.remove("hidden");
-      
+
     } catch (fetchError) {
       console.warn("Erro no envio automático:", fetchError);
       status.classList.add("hidden");
@@ -451,7 +517,7 @@ form.foto.addEventListener("change", function() {
   fotoError.classList.add("hidden");
   successMsg.classList.add("hidden");
   const file = this.files[0];
-  
+
   if (file) {
     if (!file.type.match(/^image\/(jpeg|jpg|png)$/i)) {
       fotoError.textContent = "Formato inválido. Use apenas JPG ou PNG.";
@@ -465,22 +531,7 @@ form.foto.addEventListener("change", function() {
   }
 });
 
-// Inicializar carregamento dos templates
-document.addEventListener("DOMContentLoaded", function() {
-  console.log("🚀 Carregando templates originais do GitHub...");
-  carregarTemplates();
-  
-  // Garantir que nenhum clube está selecionado inicialmente
-  selectedClubType = null;
-  document.querySelectorAll('.club-option').forEach(el => {
-    el.classList.remove('selected');
-  });
-  document.querySelectorAll('input[name="tipoClube"]').forEach(radio => {
-    radio.checked = false;
-  });
-});
-
-console.log("Rotary Réveillon 2025 - Sistema com templates originais carregado!");
+console.log("Rotary Réveillon 2025 - Sistema CORRIGIDO v05-07-2025-09-55 carregado!");
 </script>
 
 </body>
